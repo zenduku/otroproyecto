@@ -44,7 +44,7 @@ export const BarraPrincipal = ( ) => {
             <DrawerOverlay />
             <DrawerContent bg='gray.300'>
                 <DrawerCloseButton />
-                <DrawerHeader>JB Selular Gestiones</DrawerHeader>
+                <DrawerHeader>JB Celular Gestiones</DrawerHeader>
 
                 <DrawerBody>
                     <Input placeholder='Type here...' />
