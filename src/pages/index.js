@@ -19,7 +19,7 @@ export default function Home() {
     <>
           <BarraPrincipal setCurrentView={setCurrentView}/>
 
-          {currentView ==="Inicio" && <Flex  w="500px" h="500px" bg="grey" > </Flex>}
+          {currentView ==="Inicio" && <Flex  w="500px" h="500px" bg="blue" > </Flex>}
 
           {currentView ==="Control de Caja" && <Flex  w="500px" h="500px" bg="yellow" > </Flex>}
 
