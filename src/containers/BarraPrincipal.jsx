@@ -67,39 +67,39 @@ export const BarraPrincipal = ({setCurrentView} ) => {
                 size='xs'
                 
             >
-            <DrawerOverlay />
-            <DrawerContent bg='gray.200'>
-                <DrawerCloseButton />
-                <DrawerHeader>JB Celular Gestiones</DrawerHeader>
+                <DrawerOverlay />
+                <DrawerContent bg='gray.200'>
+                    <DrawerCloseButton />
+                    <DrawerHeader>JB Celular Gestiones</DrawerHeader>
 
-                <DrawerBody ps='0vw' pt='0.7vw' pb='0.7vw' pe='0vw'>
-                    <Flex direction='column' w='100%'>
+                    <DrawerBody ps='0vw' pt='0.7vw' pb='0.7vw' pe='0vw'>
+                        <Flex direction='column' w='100%'>
 
-                        {buttonText.map((text,i)=>(
-                            <Button leftIcon={buttonIcon[i]}
-                             key={i.toString()}
-                             variant='ghost'
-                             size='lg'
-                             colorScheme='telegram'
-                             ml='0vw'
-                             borderRadius='0' onClick={
-                                (e)=>cuandoLeDasClick(text)
-                             }>
-                                {text}
-                            </Button>
-                        ))
-                        }
-             
-                    </Flex>
-                </DrawerBody>
+                            {buttonText.map((text,i)=>(
+                                <Button leftIcon={buttonIcon[i]}
+                                key={i.toString()}
+                                variant='ghost'
+                                size='lg'
+                                colorScheme='telegram'
+                                ml='0vw'
+                                borderRadius='0' onClick={
+                                    (e)=>cuandoLeDasClick(text)
+                                }>
+                                    {text}
+                                </Button>
+                            ))
+                            }
+                
+                        </Flex>
+                    </DrawerBody>
 
-                <DrawerFooter justifyContent="left">
-                    <Button colorScheme='red' leftIcon={<TfiPowerOff />} variant='ghost' mr={3} onClick={onClose}>
-                    Cerrar Sesion
-                    </Button>
-                </DrawerFooter>
-            </DrawerContent>
-      </Drawer>
+                    <DrawerFooter justifyContent="left">
+                        <Button colorScheme='red' leftIcon={<TfiPowerOff />} variant='ghost' mr={3} onClick={onClose}>
+                        Cerrar Sesion
+                        </Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
         </Box>
         <Spacer />
         <Flex textAlign='center' justify='center' align='center' mr='3vw' onClick={textClick}>

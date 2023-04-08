@@ -2,13 +2,14 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from 'Zenduku/styles/Home.module.css'
-import { Divider,  } from '@chakra-ui/react'
+import { Divider, Input,  } from '@chakra-ui/react'
 import {BarraPrincipal} from "../containers/BarraPrincipal";
 import React from "react";
-import { Flex, Square, Text, Button} from '@chakra-ui/react'
+import { Flex, Square, Text, Button, Select} from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer} from '@chakra-ui/react'
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure} from '@chakra-ui/react'
+import { FormControl, FormLabel, FormErrorMessage, FormHelperText} from '@chakra-ui/react'
 
 export default function Home() {
 
@@ -24,7 +25,7 @@ export default function Home() {
           {currentView ==="Control de Caja" && <Flex  w="500px" h="500px" bg="yellow" > </Flex>}
 
           {currentView ==="Ventas" &&
-            <Flex w='100%' h='100%' align="center" justify="center">
+            <Flex w='100%' h='100%' align="center" justify="center" m='2' p='2'>
                 <Tabs isFitted variant='enclosed' align='center' w='100%'>
                   <TabList>
                     <Tab>Linea Nueva</Tab>
@@ -38,15 +39,37 @@ export default function Home() {
                       <h1>Linea Nueva!</h1>
                       <Button onClick={onOpen}>Trigger modal</Button>
 
-                      <Modal onClose={onClose} isOpen={isOpen} isCentered>
+                      <Modal onClose={onClose} isOpen={isOpen} isCentered size='xl'>
                         <ModalOverlay />
                         <ModalContent>
                           <ModalHeader>Modal Title</ModalHeader>
                           <ModalCloseButton />
                           <ModalBody>
-                            <Lorem count={2} />
+                            <Flex size='100%'>
+                              <Flex>
+                                <FormControl isRequired
+                                  border='1px' borderColor='gray.200'
+                                  borderRadius='10' p={5} alignItems="center" justifyContent="space-between"
+                                >
+                                  <FormLabel >Documento de Identidad</FormLabel>
+                                  <Flex>
+                                    <Select mr={2} w='22%'>
+                                      <option value='V'>V</option>
+                                      <option value='E'>E</option>
+                                      <option value='P'>P</option>
+                                      <option value='J'>J</option>
+                                    </Select>
+                                    <Input placeholder='Ingrese los digitos del documento'/>
+                                  </Flex>
+                                  <Input placeholder='ingrese los digitos del documento'/>
+                                </FormControl>
+                              </Flex>
+                              
+                              <Input w='50%' placeholder='Ingrese los digitos del documento' />
+                            </Flex>
+                                                        
                           </ModalBody>
-                          <ModalFooter>
+                          <ModalFooter mr={10}>
                             <Button onClick={onClose}>Close</Button>
                           </ModalFooter>
                         </ModalContent>
