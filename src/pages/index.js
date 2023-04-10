@@ -5,7 +5,8 @@ import styles from 'Zenduku/styles/Home.module.css'
 import { Divider, Input,  } from '@chakra-ui/react'
 import {BarraPrincipal} from "../containers/BarraPrincipal";
 import React from "react";
-import { Flex, Square, Text, Button, Select, Spacer, Textarea, Switch} from '@chakra-ui/react'
+import { useState } from "react";
+import { Flex, Square, Text, Button, Select, Spacer, Textarea, Switch, Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer} from '@chakra-ui/react'
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure} from '@chakra-ui/react'
@@ -17,6 +18,17 @@ export default function Home() {
   const [currentView, setCurrentView] = React.useState("Inicio")
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
+
+  const [isChecked1, setIsChecked1] = useState(false);
+  const [isChecked2, setIsChecked2] = useState(false);
+
+  const handleCheck1 = () => {
+    setIsChecked1(!isChecked1);
+  };
+
+  const handleCheck2 = () => {
+    setIsChecked2(!isChecked2);
+  };
 
   return (
     <>
@@ -87,6 +99,30 @@ export default function Home() {
                                     <GridItem rowSpan={4} colSpan={1}>
                                       <FormLabel htmlFor='inputFormaPago'>Forma de pago</FormLabel>
                                       <Input placeholder='Ingrese los digitos del documento' id='inputFormaPago'/>
+                                      <CheckboxGroup>
+                                        <Checkbox 
+                                          checked={isChecked1}
+                                          onChange={handleCheck1}
+                                          >
+                                            Checkbox1
+                                        </Checkbox>
+                                        <Checkbox 
+                                          checked={isChecked2}
+                                          onChange={handleCheck2}
+                                          >
+                                            Checkbox2
+                                        </Checkbox>
+                                        <br />
+                                        <label>
+                                          Campo numerico 1:
+                                          <input type="number" disabled={!isChecked1} />
+                                        </label>
+                                        <br />
+                                        <label>
+                                          Campo numerico 2:
+                                          <input type="number" disabled={!isChecked2} />
+                                        </label>
+                                      </CheckboxGroup>
                                     </GridItem>
                                   </Grid>
                                 </FormControl>
