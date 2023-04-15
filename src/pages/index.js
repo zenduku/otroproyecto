@@ -99,7 +99,7 @@ export default function Home() {
 
   function closeAndCleanModal() {
     deshabilitarInputs();
-    onClose();    
+    onClose();
   }
 
   return (
@@ -132,7 +132,12 @@ export default function Home() {
                 <h1>Linea Nueva!</h1>
                 <Button onClick={onOpen}>Trigger modal</Button>
 
-                <Modal onClose={closeAndCleanModal} isOpen={isOpen} isCentered size="4xl">
+                <Modal
+                  onClose={closeAndCleanModal}
+                  isOpen={isOpen}
+                  isCentered
+                  size="4xl"
+                >
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Linea Nueva</ModalHeader>
@@ -181,14 +186,14 @@ export default function Home() {
                               <FormLabel htmlFor="inputTelefonoCliente">
                                 Telefono del cliente
                               </FormLabel>
-                              <NumberInput
-                                id="inputTelefonoCliente"
-                                mb={2}
-                                inputMode="numeric"
-                                maxlength="11"
-                                pattern="[0-9]*"
-                              >
-                                <NumberInputField placeholder="Ingrese el numero asignado" />
+
+                              <NumberInput max="04129999999" defaultValue="0412" >
+                                <NumberInputField
+                                  id="inputTelefonoCliente"
+                                  mb={2}
+                                  placeholder="Ingrese el numero asignado"
+                                  maxlength="11"
+                                />
                               </NumberInput>
                             </FormControl>
 
@@ -200,14 +205,17 @@ export default function Home() {
                                 </FormLabel>
                               </Flex>
                             </FormControl>
-                            
+
                             <FormControl isRequired>
                               <FormLabel htmlFor="inputNumeroOrden">
                                 Numero de Orden
                               </FormLabel>
-                                <Input placeholder="Ingrese la orden asignada" id="inputNumeroOrden"
+                              <Input
+                                placeholder="Ingrese la orden asignada"
+                                id="inputNumeroOrden"
                                 mb={2}
-                                maxlength="8"/>
+                                maxlength="8"
+                              />
                             </FormControl>
 
                             <FormControl>
@@ -292,17 +300,17 @@ export default function Home() {
                                 Bolivares
                               </FormLabel>
                               <InputGroup>
-                              <InputLeftElement
+                                <InputLeftElement
                                   pointerEvents="none"
                                   color="gray.300"
                                   children="Bs."
                                 />
-                              <Input
-                                placeholder="Monto en Bolivares Efectivo"
-                                id="inputPagoBolivares"
-                                disabled={!isChecked2}
-                                type="number"
-                              />
+                                <Input
+                                  placeholder="Monto en Bolivares Efectivo"
+                                  id="inputPagoBolivares"
+                                  disabled={!isChecked2}
+                                  type="number"
+                                />
                               </InputGroup>
                             </FormControl>
 
@@ -311,17 +319,17 @@ export default function Home() {
                                 Debito 1
                               </FormLabel>
                               <InputGroup>
-                              <InputLeftElement
+                                <InputLeftElement
                                   pointerEvents="none"
                                   color="gray.300"
                                   children="Bs."
                                 />
-                              <Input
-                                placeholder="Monto en Debito"
-                                id="inputPagoDebito1"
-                                disabled={!isChecked3}
-                                type="number"
-                              />
+                                <Input
+                                  placeholder="Monto en Debito"
+                                  id="inputPagoDebito1"
+                                  disabled={!isChecked3}
+                                  type="number"
+                                />
                               </InputGroup>
                             </FormControl>
 
@@ -330,17 +338,17 @@ export default function Home() {
                                 Debito 2
                               </FormLabel>
                               <InputGroup>
-                              <InputLeftElement
+                                <InputLeftElement
                                   pointerEvents="none"
                                   color="gray.300"
                                   children="Bs."
                                 />
-                              <Input
-                                placeholder="Monto en Debito"
-                                id="inputPagoDebito2"
-                                disabled={!isChecked4}
-                                type="number"
-                              />
+                                <Input
+                                  placeholder="Monto en Debito"
+                                  id="inputPagoDebito2"
+                                  disabled={!isChecked4}
+                                  type="number"
+                                />
                               </InputGroup>
                             </FormControl>
 
@@ -355,25 +363,25 @@ export default function Home() {
                                 </FormLabel>
                               </Flex>
                               <Flex>
-                              <InputGroup>
-                              <InputLeftElement
-                                  pointerEvents="none"
-                                  color="gray.300"
-                                  children="Bs."
-                                />
-                                <Input
-                                  placeholder="Monto en Pago movil"
-                                  id="inputPagoPagomovil"
-                                  disabled={!isChecked5}
-                                  type="number"
-                                />
+                                <InputGroup>
+                                  <InputLeftElement
+                                    pointerEvents="none"
+                                    color="gray.300"
+                                    children="Bs."
+                                  />
+                                  <Input
+                                    placeholder="Monto en Pago movil"
+                                    id="inputPagoPagomovil"
+                                    disabled={!isChecked5}
+                                    type="number"
+                                  />
                                 </InputGroup>
                                 <Input
                                   placeholder="Nro. de Referencia"
                                   id="inputReferenciaPagomovil"
                                   disabled={!isChecked5}
                                   ml={2}
-                                  w='80%'
+                                  w="80%"
                                   type="number"
                                 />
                               </Flex>
