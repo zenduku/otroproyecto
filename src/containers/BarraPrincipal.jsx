@@ -76,7 +76,7 @@ export const BarraPrincipal = ({ setCurrentView }) => {
           size="xs"
         >
           <DrawerOverlay />
-          <DrawerContent bg="gray.200">
+          <DrawerContent bg="gray.400">
             <DrawerCloseButton />
             <DrawerHeader>JB Celular Gestiones</DrawerHeader>
 
@@ -90,6 +90,7 @@ export const BarraPrincipal = ({ setCurrentView }) => {
                     size="lg"
                     colorScheme="telegram"
                     ml="0vw"
+                    mb={2}
                     borderRadius="0"
                     onClick={(e) => cuandoLeDasClick(text)}
                   >
@@ -101,7 +102,7 @@ export const BarraPrincipal = ({ setCurrentView }) => {
 
             <DrawerFooter justifyContent="left">
               <Button
-                colorScheme="red"
+                bg="red.300"
                 leftIcon={<TfiPowerOff />}
                 variant="ghost"
                 mr={3}

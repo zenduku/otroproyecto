@@ -17,6 +17,8 @@ import {
   Switch,
   Checkbox,
   CheckboxGroup,
+  IconButton,
+  Heading,
 } from "@chakra-ui/react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import {
@@ -56,13 +58,18 @@ import {
   InputLeftElement,
   InputGroup,
 } from "@chakra-ui/react";
-import { FaDollarSign } from "react-icons/fa";
+import {
+  TfiPlus,
+  TfiTrash,
+  TfiSave,
+  TfiUpload,
+  TfiClose,
+} from "react-icons/tfi";
 
 export default function Home() {
-  const [currentView, setCurrentView] = React.useState("Inicio");
+  const [currentView, setCurrentView] = React.useState("Ventas");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
 
   const [isChecked1, setIsChecked1] = useState(false);
   const handleCheck1 = () => {
@@ -89,31 +96,123 @@ export default function Home() {
     setIsChecked5(!isChecked5);
   };
 
+  const [isCheckedSwitch, setIsCheckedSwitch] = useState(false);
+  const handleCheckSwitch = () => {
+    console.log(switchValue);
+    setIsCheckedSwitch(!isCheckedSwitch);
+    console.log(switchValue);
+  };
+  const switchValue = isCheckedSwitch ? "si" : "no";
+
   function deshabilitarInputs() {
     setIsChecked1(false);
     setIsChecked2(false);
     setIsChecked3(false);
     setIsChecked4(false);
     setIsChecked5(false);
+    setIsCheckedSwitch(false);
   }
 
   function closeAndCleanModal() {
     deshabilitarInputs();
+    setSelects([{ id: Date.now() }]);
+    setTotal(0);
     onClose();
   }
+
+  //Metodos del Select
+  const [selects, setSelects] = useState([{ id: Date.now(), monto: 0 }]);
+
+  const handleAddSelect = () => {
+    setSelects([...selects, { id: Date.now() }]);
+  };
+
+  const handleRemoveSelect = (id) => {
+    const selectToDelete = selects.find((select) => select.id === id);
+    const newTotal = total - selectToDelete.monto;
+    setTotal(newTotal);
+    setSelects(selects.filter((select) => select.id !== id));
+  };
+
+  const [total, setTotal] = useState(0);
+
+  const handleMontoChange = (id, value) => {
+    setSelects((prevSelects) => {
+      const newSelects = prevSelects.map((select) => {
+        if (select.id === id) {
+          return { ...select, monto: parseInt(value) };
+        }
+        return select;
+      });
+      const newTotal = newSelects.reduce(
+        (acc, select) => acc + select.monto,
+        0
+      );
+      setTotal(newTotal);
+      return newSelects;
+    });
+  };
+
+  //Metodos de Submit
+  const [formData, setFormData] = useState([]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Previene que se recargue la página
+    const {
+      switcheSIM,
+      inputDocumentoIdentidad,
+      inputTelefonoCliente,
+      totalSelectMount,
+      inputNumeroOrden,
+      inputPagoDolares,
+      inputPagoBolivares,
+      inputPagoDebito1,
+      inputPagoDebito2,
+      inputPagoPagomovil,
+      inputReferenciaPagomovil,
+      textareaObservacion,
+    } = event.target.elements; // Obtiene los valores del formulario
+    setFormData([
+      ...formData, // Copia los elementos previos del array
+      {
+        registroCount: formData.length + 1,
+        eSim: switcheSIM.value,
+        cedula: inputDocumentoIdentidad.value,
+        telefono: inputTelefonoCliente.value,
+        recarga: totalSelectMount.value,
+        orden: inputNumeroOrden.value,
+        pagoDolares: inputPagoDolares.value,
+        pagoBolivares: inputPagoBolivares.value,
+        pagoDebito1: inputPagoDebito1.value,
+        pagoDebito2: inputPagoDebito2.value,
+        pagoMovil: inputPagoPagomovil.value,
+        referenciaPM: inputReferenciaPagomovil.value,
+        observacion: textareaObservacion.value,
+      }, // Agrega el nuevo elemento al array con el campo "registroCount" asignado a la cantidad actual de elementos más 1
+    ]);
+    // Limpia los campos del formulario
+
+    closeAndCleanModal();
+  };
+
+  const handleDeleteTd = (index) => {
+    const newFormData = [...formData];
+    newFormData.splice(index, 1);
+    setFormData(newFormData);
+  };
 
   return (
     <>
       <BarraPrincipal setCurrentView={setCurrentView} />
 
       {currentView === "Inicio" && (
-        <Flex w="500px" h="500px" bg="blue">
+        <Flex >
           {" "}
         </Flex>
       )}
 
       {currentView === "Control de Caja" && (
-        <Flex w="500px" h="500px" bg="yellow">
+        <Flex >
           {" "}
         </Flex>
       )}
@@ -130,36 +229,42 @@ export default function Home() {
             <TabPanels h="100%">
               <TabPanel>
                 <h1>Linea Nueva!</h1>
-                <Button onClick={onOpen}>Trigger modal</Button>
+                <Button onClick={onOpen}>Nueva Venta</Button>
 
-                <Modal
-                  onClose={closeAndCleanModal}
-                  isOpen={isOpen}
-                  isCentered
-                  size="4xl"
-                >
+                <Modal onClose={closeAndCleanModal} isOpen={isOpen} size="5xl">
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Linea Nueva</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
-                      <form
-                        h="100%"
-                        p={3}
-                        alignItems="center"
-                        justifyContent="space-between"
-                      >
+                    <form
+                      h="100%"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      onSubmit={handleSubmit}
+                    >
+                      <ModalBody>
                         <Grid
+                          boxShadow="lg"
                           border="1px"
                           borderColor="gray.200"
                           borderRadius="10"
                           h="100%"
-                          p={3}
+                          p={4}
+                          m={-2}
                           templateRows="repeat(4, 1fr)"
                           templateColumns="repeat(2, 1fr)"
                           gap={4}
                         >
                           <GridItem rowSpan={6} colSpan={1}>
+                            <Heading
+                              as="h4"
+                              size="md"
+                              mb={2}
+                              borderBottom="2px"
+                              borderColor="gray.400"
+                            >
+                              Formulario de Venta
+                            </Heading>
                             <FormControl isRequired>
                               <FormLabel
                                 htmlFor="inputDocumentoIdentidad"
@@ -169,15 +274,16 @@ export default function Home() {
                               </FormLabel>
                               <Flex>
                                 <Select mr={2} w="22%" mb={2}>
-                                  <option value="V">V</option>
-                                  <option value="E">E</option>
-                                  <option value="P">P</option>
-                                  <option value="J">J</option>
+                                  <option value="v">V</option>
+                                  <option value="e">E</option>
+                                  <option value="p">P</option>
+                                  <option value="j">J</option>
                                 </Select>
                                 <Input
                                   id="inputDocumentoIdentidad"
                                   placeholder="Ingrese los digitos del documento"
                                   maxlength="10"
+                                  name="inputDocumentoIdentidad"
                                 />
                               </Flex>
                             </FormControl>
@@ -187,22 +293,31 @@ export default function Home() {
                                 Telefono del cliente
                               </FormLabel>
 
-                              <NumberInput max="04129999999" defaultValue="0412" >
+                              <NumberInput>
                                 <NumberInputField
                                   id="inputTelefonoCliente"
                                   mb={2}
                                   placeholder="Ingrese el numero asignado"
                                   maxlength="11"
+                                  name="inputTelefonoCliente"
                                 />
                               </NumberInput>
                             </FormControl>
 
                             <FormControl>
                               <Flex>
-                                <Switch id="switch-eSIM" mr={2} mt={0.5} />
-                                <FormLabel htmlFor="switch-eSIM">
+                                <FormLabel htmlFor="switcheSIM">
                                   Venta con eSIM
                                 </FormLabel>
+                                <Switch
+                                  id="switcheSIM"
+                                  mr={2}
+                                  mt={0.5}
+                                  isChecked={isCheckedSwitch}
+                                  onChange={handleCheckSwitch}
+                                  value={switchValue}
+                                  name="switcheSIM"
+                                />
                               </Flex>
                             </FormControl>
 
@@ -215,29 +330,104 @@ export default function Home() {
                                 id="inputNumeroOrden"
                                 mb={2}
                                 maxlength="8"
+                                name="inputNumeroOrden"
                               />
                             </FormControl>
 
                             <FormControl>
-                              <FormLabel
-                                htmlFor="textareaComentario"
-                                isRequired="false"
-                              >
-                                Comentario
-                              </FormLabel>
-                              <Textarea
-                                id="textareaComentario"
-                                placeholder="Escriba un comentario si es necesario"
-                                size="xs"
-                                resize="none"
-                                maxlength="250"
-                              />
+                              <FormLabel>Recarga Telefonica</FormLabel>
+                              <div>
+                                <Button
+                                  onClick={handleAddSelect}
+                                  leftIcon={<TfiPlus />}
+                                  _hover={{ bg: "green.300" }}
+                                  mb={2}
+                                >
+                                  Añadir Otro Telefono
+                                </Button>
+                                {selects.map((select) => (
+                                  <Flex key={select.id} mb={2}>
+                                    <Select
+                                      placeholder="Telefono de Recarga"
+                                      mr={2}
+                                    >
+                                      <option value="telefono1">
+                                        Telefono 1
+                                      </option>
+                                      <option value="telefono2">
+                                        Telefono 2
+                                      </option>
+                                      <option value="telefono3">
+                                        Telefono 3
+                                      </option>
+                                      <option value="telefono4">
+                                        Telefono 4
+                                      </option>
+                                      <option value="telefono5">
+                                        Telefono 5
+                                      </option>
+                                      <option value="telefono6">
+                                        Telefono 6
+                                      </option>
+                                      <option value="telefono7">
+                                        Telefono 7
+                                      </option>
+                                    </Select>
+                                    <Select
+                                      placeholder="Selecciona un Monto"
+                                      mr={2}
+                                      onChange={(e) =>
+                                        handleMontoChange(
+                                          select.id,
+                                          e.target.value
+                                        )
+                                      }
+                                    >
+                                      <option value="30">30</option>
+                                      <option value="60">60</option>
+                                      <option value="90">90</option>
+                                      <option value="120">120</option>
+                                      <option value="150">150</option>
+                                      <option value="180">180</option>
+                                      <option value="210">210</option>
+                                      <option value="240">240</option>
+                                      <option value="270">270</option>
+                                      <option value="300">300</option>
+                                    </Select>
+                                    <IconButton
+                                      onClick={() =>
+                                        handleRemoveSelect(select.id)
+                                      }
+                                      _hover={{ bg: "red.300" }}
+                                      icon={<TfiTrash />}
+                                      isRound="true"
+                                      size="sm"
+                                      mt={1}
+                                    >
+                                      Eliminar
+                                    </IconButton>
+                                  </Flex>
+                                ))}
+                              </div>
+                              <Input value={total} name="totalSelectMount" disabled/>
                             </FormControl>
                           </GridItem>
 
                           <GridItem rowSpan={6} colSpan={1}>
-                            <FormControl isRequired>
-                              <CheckboxGroup>
+                            <Heading
+                              as="h4"
+                              size="md"
+                              mb={2}
+                              borderBottom="2px"
+                              borderColor="gray.400"
+                            >
+                              Formulario de Pago
+                            </Heading>
+                            <FormControl>
+                              <FormLabel htmlFor="checkboxGroupMetodoPago">
+                                Metodo de Pago
+                              </FormLabel>
+                              <CheckboxGroup id="checkboxGroupMetodoPago">
                                 <Checkbox
                                   checked={isChecked1}
                                   onChange={handleCheck1}
@@ -291,6 +481,7 @@ export default function Home() {
                                   id="inputPagoDolares"
                                   disabled={!isChecked1}
                                   type="number"
+                                  name="inputPagoDolares"
                                 />
                               </InputGroup>
                             </FormControl>
@@ -310,6 +501,7 @@ export default function Home() {
                                   id="inputPagoBolivares"
                                   disabled={!isChecked2}
                                   type="number"
+                                  name="inputPagoBolivares"
                                 />
                               </InputGroup>
                             </FormControl>
@@ -329,6 +521,7 @@ export default function Home() {
                                   id="inputPagoDebito1"
                                   disabled={!isChecked3}
                                   type="number"
+                                  name="inputPagoDebito1"
                                 />
                               </InputGroup>
                             </FormControl>
@@ -348,6 +541,7 @@ export default function Home() {
                                   id="inputPagoDebito2"
                                   disabled={!isChecked4}
                                   type="number"
+                                  name="inputPagoDebito2"
                                 />
                               </InputGroup>
                             </FormControl>
@@ -374,6 +568,7 @@ export default function Home() {
                                     id="inputPagoPagomovil"
                                     disabled={!isChecked5}
                                     type="number"
+                                    name="inputPagoPagomovil"
                                   />
                                 </InputGroup>
                                 <Input
@@ -383,16 +578,47 @@ export default function Home() {
                                   ml={2}
                                   w="80%"
                                   type="number"
+                                  name="inputReferenciaPagomovil"
                                 />
                               </Flex>
                             </FormControl>
+                            <FormControl>
+                              <FormLabel
+                                htmlFor="textareaObservacion"
+                                isRequired="false"
+                              >
+                                Observacion
+                              </FormLabel>
+                              <Textarea
+                                id="textareaObservacion"
+                                placeholder="Escriba una observacion si es necesario"
+                                size="xs"
+                                resize="none"
+                                maxlength="250"
+                                name="textareaObservacion"
+                              />
+                            </FormControl>
                           </GridItem>
                         </Grid>
-                      </form>
-                    </ModalBody>
-                    <ModalFooter mr={10}>
-                      <Button onClick={closeAndCleanModal}>Close</Button>
-                    </ModalFooter>
+                      </ModalBody>
+                      <ModalFooter mr={10}>
+                        <Button
+                          type="submit"
+                          mr="2vw"
+                          _hover={{ bg: "blue.200" }}
+                          leftIcon={<TfiUpload />}
+                        >
+                          Enviar
+                        </Button>
+                        <Button
+                          onClick={closeAndCleanModal}
+                          _hover={{ bg: "red.300" }}
+                          leftIcon={<TfiClose />}
+                        >
+                          Close
+                        </Button>
+                      </ModalFooter>
+                    </form>
                   </ModalContent>
                 </Modal>
 
@@ -403,38 +629,56 @@ export default function Home() {
                     </TableCaption>
                     <Thead>
                       <Tr>
-                        <Th>To convert</Th>
-                        <Th>into</Th>
-                        <Th isNumeric>multiply by</Th>
+                        <Th>#</Th>
+                        <Th>eSim</Th>
+                        <Th>Cedula</Th>
+                        <Th>Telefono</Th>
+                        <Th>Recarga</Th>
+                        <Th>Orden</Th>
+                        <Th>Pago $</Th>
+                        <Th>Pago Bs.</Th>
+                        <Th>Pago Debito1</Th>
+                        <Th>Pago Debito2</Th>
+                        <Th>Pago PM</Th>
+                        <Th>Referencia PM</Th>
+                        <Th>Observacion</Th>
+                        <Th>Modificar / Eliminar</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
-                      <Tr>
-                        <Td>inches</Td>
-                        <Td>millimetres (mm)</Td>
-                        <Td isNumeric>25.4</Td>
-                      </Tr>
-                      <Tr>
-                        <Td>feet</Td>
-                        <Td>centimetres (cm)</Td>
-                        <Td isNumeric>30.48</Td>
-                      </Tr>
-                      <Tr>
-                        <Td>yards</Td>
-                        <Td>metres (m)</Td>
-                        <Td isNumeric>0.91444</Td>
-                      </Tr>
+                      {formData.map((data, index) => (
+                        <Tr key={index}>
+                          <Td>{data.registroCount}</Td>
+                          <Td>{data.eSim}</Td>
+                          <Td>{data.cedula}</Td>
+                          <Td>{data.telefono}</Td>
+                          <Td>{data.recarga}</Td>
+                          <Td>{data.orden}</Td>
+                          <Td>{data.pagoDolares}</Td>
+                          <Td>{data.pagoBolivares}</Td>
+                          <Td>{data.pagoDebito1}</Td>
+                          <Td>{data.pagoDebito2}</Td>
+                          <Td>{data.pagoMovil}</Td>
+                          <Td>{data.referenciaPM}</Td>
+                          <Td>{data.observacion}</Td>
+                          <Td>
+                            <IconButton /> /
+                            <IconButton
+                              aria-label="Eliminar registro"
+                              _hover={{ bg: "red.300" }}
+                              icon={<TfiTrash />}
+                              isRound="true"
+                              size="sm"
+                              onClick={() => handleDeleteTd(index)}
+                            />
+                          </Td>
+                        </Tr>
+                      ))}
                     </Tbody>
-                    <Tfoot>
-                      <Tr>
-                        <Th>To convert</Th>
-                        <Th>into</Th>
-                        <Th isNumeric>multiply by</Th>
-                      </Tr>
-                    </Tfoot>
                   </Table>
                 </TableContainer>
               </TabPanel>
+              {/*<pre>{JSON.stringify(formData, null, 2)}</pre> */}
 
               <TabPanel>
                 <p>Linea Reemplazo!</p>
@@ -453,7 +697,7 @@ export default function Home() {
       )}
 
       {currentView === "Post-Venta" && (
-        <Flex w="500px" h="500px" bg="red">
+        <Flex >
           {" "}
         </Flex>
       )}
