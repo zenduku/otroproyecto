@@ -67,9 +67,36 @@ import {
 } from "react-icons/tfi";
 
 export default function Home() {
-  const [currentView, setCurrentView] = React.useState("Ventas");
+  const [currentView, setCurrentView] = React.useState("Inicio");
+  
+  const [activeTab, setActiveTab] = useState(0);
+  const [modalsOpen, setModalsOpen] = useState([]);
+
+  const handleTabChange = (index) => {
+    setActiveTab(index);
+  };
+
+  const handleOpenModal = () => {
+    const updatedModalsOpen = [...modalsOpen];
+    updatedModalsOpen[activeTab] = true;
+    setModalsOpen(updatedModalsOpen);
+  };
+
+  const closeAndCleanModal = () => {
+    deshabilitarInputs();
+    setSelects([{ id: Date.now() }]);
+    setTotal(0);
+    handleCloseModal();
+  };
+
+  const handleCloseModal = () => {
+    const updatedModalsOpen = [...modalsOpen];
+    updatedModalsOpen[activeTab] = false;
+    setModalsOpen(updatedModalsOpen);
+  };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  
 
   const [isChecked1, setIsChecked1] = useState(false);
   const handleCheck1 = () => {
@@ -96,6 +123,12 @@ export default function Home() {
     setIsChecked5(!isChecked5);
   };
 
+  const [isChecked6, setIsChecked6] = useState(false);
+  const handleCheck6 = () => {
+    setIsChecked6(!isChecked6);
+  };
+  
+
   const [isCheckedSwitch, setIsCheckedSwitch] = useState(false);
   const handleCheckSwitch = () => {
     console.log(switchValue);
@@ -111,13 +144,6 @@ export default function Home() {
     setIsChecked4(false);
     setIsChecked5(false);
     setIsCheckedSwitch(false);
-  }
-
-  function closeAndCleanModal() {
-    deshabilitarInputs();
-    setSelects([{ id: Date.now() }]);
-    setTotal(0);
-    onClose();
   }
 
   //Metodos del Select
@@ -219,7 +245,7 @@ export default function Home() {
 
       {currentView === "Ventas" && (
         <Flex w="100%" h="100%" align="center" justify="center" m="2" p="2">
-          <Tabs isFitted variant="enclosed" align="center" w="100%">
+          <Tabs onChange={handleTabChange} isFitted variant="enclosed" align="center" w="100%">
             <TabList>
               <Tab>Linea Nueva</Tab>
               <Tab>Linea Reemplazo</Tab>
@@ -227,9 +253,8 @@ export default function Home() {
             </TabList>
             <TabPanels h="100%">
               <TabPanel>
-                <Button onClick={onOpen}>Nueva Venta</Button>
-
-                <Modal onClose={closeAndCleanModal} isOpen={isOpen} size="5xl">
+                <Button onClick={handleOpenModal}>Nueva Venta</Button>
+                <Modal isOpen={modalsOpen[0]} onClose={closeAndCleanModal} size="5xl">
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Linea Nueva</ModalHeader>
@@ -332,7 +357,7 @@ export default function Home() {
                               />
                             </FormControl>
 
-                            <FormControl>
+                            <FormControl isRequired>
                               <FormLabel>Recarga Telefonica</FormLabel>
                               <div>
                                 <Button
@@ -440,6 +465,13 @@ export default function Home() {
                                   Debito 2
                                 </Checkbox>
                                 <Checkbox
+                                  checked={isChecked6}
+                                  onChange={handleCheck6}
+                                  mr={2}
+                                >
+                                  Debito 3
+                                </Checkbox>
+                                <Checkbox
                                   checked={isChecked5}
                                   onChange={handleCheck5}
                                   mr={2}
@@ -525,6 +557,26 @@ export default function Home() {
                                   disabled={!isChecked4}
                                   type="number"
                                   name="inputPagoDebito2"
+                                />
+                              </InputGroup>
+                            </FormControl>
+
+                            <FormControl isRequired>
+                              <FormLabel htmlFor="inputPagoDebito3">
+                                Debito 3
+                              </FormLabel>
+                              <InputGroup>
+                                <InputLeftElement
+                                  pointerEvents="none"
+                                  color="gray.300"
+                                  children="Bs."
+                                />
+                                <Input
+                                  placeholder="Monto en Debito"
+                                  id="inputPagoDebito3"
+                                  disabled={!isChecked6}
+                                  type="number"
+                                  name="inputPagoDebito3"
                                 />
                               </InputGroup>
                             </FormControl>
@@ -657,14 +709,13 @@ export default function Home() {
                   </Table>
                 </TableContainer>
               </TabPanel>
-              {/*<pre>{JSON.stringify(formData, null, 2)}</pre> */}
-
+              
+                
               <TabPanel>
                 <p>Reemplazo de Linea</p>
-                <TabPanel>
-                <Button onClick={onOpen}>Nueva Venta</Button>
+                <Button onClick={handleOpenModal}>Nueva Venta</Button>
 
-                <Modal onClose={closeAndCleanModal} isOpen={isOpen} size="5xl">
+                <Modal isOpen={modalsOpen[1]} onClose={closeAndCleanModal} size="5xl">
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Reemplazo de Linea</ModalHeader>
@@ -988,7 +1039,6 @@ export default function Home() {
                         <Th>eSim</Th>
                         <Th>Cedula</Th>
                         <Th>Telefono</Th>
-                        <Th>Recarga</Th>
                         <Th>Orden</Th>
                         <Th>Pago $</Th>
                         <Th>Referencia PM</Th>
@@ -1029,14 +1079,13 @@ export default function Home() {
                   </Table>
                 </TableContainer>
               </TabPanel>
-              </TabPanel>
+   
 
               <TabPanel>
                 <p>Servicio de Recarga!</p>
-                <TabPanel>
-                <Button onClick={onOpen}>Nueva Recarga</Button>
+                <Button onClick={handleOpenModal}>Nueva Recarga</Button>
 
-                <Modal onClose={closeAndCleanModal} isOpen={isOpen} size="5xl">
+                <Modal isOpen={modalsOpen[2]} onClose={closeAndCleanModal} size="5xl">
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Servicio de Recarga</ModalHeader>
@@ -1109,7 +1158,7 @@ export default function Home() {
                               </NumberInput>
                             </FormControl>
 
-                            <FormControl>
+                            <FormControl isRequired>
                               <FormLabel>Recarga Telefonica</FormLabel>
                               <div>
                                 <Button
@@ -1217,6 +1266,13 @@ export default function Home() {
                                   Debito 2
                                 </Checkbox>
                                 <Checkbox
+                                  checked={isChecked6}
+                                  onChange={handleCheck6}
+                                  mr={2}
+                                >
+                                  Debito 3
+                                </Checkbox>
+                                <Checkbox
                                   checked={isChecked5}
                                   onChange={handleCheck5}
                                   mr={2}
@@ -1307,6 +1363,26 @@ export default function Home() {
                             </FormControl>
 
                             <FormControl isRequired>
+                              <FormLabel htmlFor="inputPagoDebito3">
+                                Debito 3
+                              </FormLabel>
+                              <InputGroup>
+                                <InputLeftElement
+                                  pointerEvents="none"
+                                  color="gray.300"
+                                  children="Bs."
+                                />
+                                <Input
+                                  placeholder="Monto en Debito"
+                                  id="inputPagoDebito3"
+                                  disabled={!isChecked6}
+                                  type="number"
+                                  name="inputPagoDebito3"                                  
+                                />
+                              </InputGroup>
+                            </FormControl>
+
+                            <FormControl isRequired>
                               <Flex>
                                 <FormLabel htmlFor="inputPagoPagomovil">
                                   Pago movil
@@ -1390,11 +1466,9 @@ export default function Home() {
                     <Thead>
                       <Tr>
                         <Th>#</Th>
-                        <Th>eSim</Th>
                         <Th>Cedula</Th>
                         <Th>Telefono</Th>
                         <Th>Recarga</Th>
-                        <Th>Orden</Th>
                         <Th>Pago $</Th>
                         <Th>Referencia PM</Th>
                         <Th>Observacion</Th>
@@ -1434,8 +1508,6 @@ export default function Home() {
                   </Table>
                 </TableContainer>
               </TabPanel>
-              </TabPanel>
-
             </TabPanels>
           </Tabs>
         </Flex>
