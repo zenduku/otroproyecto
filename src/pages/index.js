@@ -1152,13 +1152,14 @@ export default function Home() {
                           <Td>{data.eSim}</Td>
                           <Td>{data.cedula}</Td>
                           <Td>{data.telefono}</Td>
-                          <Td>{data.recarga}</Td>
                           <Td>{data.orden}</Td>
-                          <Td>{data.pagoDolares}</Td>
+                          <Td>
+                            <Td>{data.pagoDolares}</Td>
                           <Td>{data.pagoBolivares}</Td>
                           <Td>{data.pagoDebito1}</Td>
                           <Td>{data.pagoDebito2}</Td>
                           <Td>{data.pagoMovil}</Td>
+                          </Td>
                           <Td>{data.referenciaPM}</Td>
                           <Td>{data.observacion}</Td>
                           <Td>
