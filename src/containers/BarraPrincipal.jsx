@@ -36,25 +36,6 @@ export const BarraPrincipal = ({ setCurrentView }) => {
   const cuandoLeDasClick = (cldc) => {
     console.log(cldc);
     setCurrentView(cldc);
-    switch (cldc) {
-      case "Inicio":
-        console.log("Estas en Inicio");
-        break;
-      case "Control de Caja":
-        console.log("Estas en Control de Caja");
-        break;
-      case "Ventas":
-        console.log("Estas en Ventas");
-        // Expected output: "Mangoes and papayas are $2.79 a pound."
-        break;
-      case "Post-Venta":
-        console.log("Estas en Post-Venta");
-        // Expected output: "Mangoes and papayas are $2.79 a pound."
-        break;
-
-      default:
-        console.log(`Sorry, we are out of ${cldc}.`);
-    }
   };
 
   return (
