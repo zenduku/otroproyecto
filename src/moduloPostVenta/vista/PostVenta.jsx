@@ -73,14 +73,10 @@ export const PostVenta = () => {
     setModalsOpen(updatedModalsOpen);
   };
 
-  const closeAndCleanModal = () => {
-    handleCloseModal();
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const handleCloseModal = () => {
-    const updatedModalsOpen = [...modalsOpen];
-    updatedModalsOpen[activeTab] = false;
-    setModalsOpen(updatedModalsOpen);
+  const closeAndCleanModal = () => {
+    onClose();
   };
 
   //Metodos de Submit
@@ -106,17 +102,9 @@ export const PostVenta = () => {
       ...formData, // Copia los elementos previos del array
       {
         registroCount: formData.length + 1,
-        eSim: switcheSIM.value,
         cedula: inputDocumentoIdentidad.value,
         telefono: inputTelefonoCliente.value,
-        recarga: totalSelectMount.value,
         orden: inputNumeroOrden.value,
-        pagoDolares: inputPagoDolares.value,
-        pagoBolivares: inputPagoBolivares.value,
-        pagoDebito1: inputPagoDebito1.value,
-        pagoDebito2: inputPagoDebito2.value,
-        pagoMovil: inputPagoPagomovil.value,
-        referenciaPM: inputReferenciaPagomovil.value,
         observacion: textareaObservacion.value,
       }, // Agrega el nuevo elemento al array con el campo "registroCount" asignado a la cantidad actual de elementos más 1
     ]);
@@ -149,9 +137,9 @@ export const PostVenta = () => {
             Post-Venta
           </Heading>
 
-          <Button onClick={handleOpenModal}>Nueva Entrada</Button>
+          <Button onClick={onOpen}>Nueva Entrada</Button>
 
-          <Modal isOpen={modalsOpen[0]} onClose={closeAndCleanModal} size="5xl">
+          <Modal isOpen={isOpen} onClose={closeAndCleanModal} size="5xl">
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Nueva PostVenta</ModalHeader>

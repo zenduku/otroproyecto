@@ -62,9 +62,9 @@ import {
   TfiUpload,
   TfiClose,
 } from "react-icons/tfi";
-import { ControCaja } from "Zenduku/vistas/controlCaja/ControlCaja";
-import { Venta } from "Zenduku/vistas/venta/Venta";
-import { PostVenta } from "Zenduku/vistas/postVenta/PostVenta";
+import { ControCaja } from "Zenduku/moduloControlCaja/vista/ControlCaja";
+import { Venta } from "Zenduku/moduloVentas/vista/Venta";
+import { PostVenta } from "Zenduku/moduloPostVenta/vista/PostVenta";
 
 export default function Home() {
   const [currentView, setCurrentView] = React.useState("Inicio");
